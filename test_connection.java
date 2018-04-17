@@ -6,7 +6,6 @@
 package projet_final;
 
 import java.sql.*;
-import java.util.logging.*;
 
 /**
  *
@@ -14,7 +13,7 @@ import java.util.logging.*;
  */
 public class test_connection {
 
-    utilitaire notre_connexion = new utilitaire("jdbc:derby://localhost:1527/evaluation_finale", "darryl", "dd");
+    Utilitaire notre_connexion = new Utilitaire("jdbc:derby://localhost:1527/evaluation", "niki", "niki");
 
     public void read_databes() {
         Statement statement = null;
@@ -69,13 +68,11 @@ public class test_connection {
             result.updateString("CODE_CATEGORIE", code_categorie);
             result.updateDouble("PRIX", prix);
             result.insertRow();
-            for(short i = 1; i <= result.getMetaData().getColumnCount(); i++)
-            {
+            for (short i = 1; i <= result.getMetaData().getColumnCount(); i++) {
                 System.out.println(result.getMetaData().getColumnType(i));
             }
-           
-            //result.insertRow();
 
+            //result.insertRow();
         } catch (SQLException ex) {
             System.out.println("une erreur est survenue !!!!");
             ex.printStackTrace();
@@ -175,9 +172,16 @@ public class test_connection {
         }
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws SQLException {
         test_connection une_connection = new test_connection();
-        une_connection.insert_data("HIHI", "TRAIN", "T1", 1000000);
+        une_connection.insert_data("HAHAHA", "TRAIN", "T1", 10000);
+        Modele m = new Modele();
+
+        String[] column = new String[1];
+        column[0] = "PRIX";
+        String[] valeurs = new String[1];
+        valeurs[0] = "2000";
+       // m.modification("ARCTICLE", column, valeurs, "PRIX = 1000000");
         //read_databes();
     }
 }
