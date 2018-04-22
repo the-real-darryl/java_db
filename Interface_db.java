@@ -19,23 +19,21 @@ import javax.swing.JOptionPane;
  * @author ddaar
  */
 public class Interface_db extends javax.swing.JFrame implements WindowListener, Observer {
+
     Controleur contr;
     Modele donne;
 
     /**
      * Creates new form interface_db
      */
-    public Interface_db() {
-        try {
-            this.donne = new Modele();
-            donne.addObserver(this);
-            donne.select_query();
-            //donne.premier();
-        } catch (SQLException ex) {
-            Logger.getLogger(Interface_db.class.getName()).log(Level.SEVERE, null, ex);
-        }
-      //  contr = c;
+    public Interface_db(Controleur c, Modele m) {
         initComponents();
+        contr = c;
+        donne = m;
+        m.addObserver(this);
+        donne.select_query();
+        donne.premier();
+
         setLocationRelativeTo(null);
         setResizable(true);
 
@@ -78,6 +76,8 @@ public class Interface_db extends javax.swing.JFrame implements WindowListener, 
         jLabel5 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         JBnouveau = new javax.swing.JButton();
+        JBAjouter = new javax.swing.JButton();
+        JBAnnuler = new javax.swing.JButton();
         JBmodifier = new javax.swing.JButton();
         JBsupprimer = new javax.swing.JButton();
 
@@ -158,6 +158,24 @@ public class Interface_db extends javax.swing.JFrame implements WindowListener, 
         });
         jPanel3.add(JBnouveau);
 
+        JBAjouter.setText("Ajouter");
+        JBAjouter.setEnabled(false);
+        JBAjouter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBAjouterActionPerformed(evt);
+            }
+        });
+        jPanel3.add(JBAjouter);
+
+        JBAnnuler.setText("Annuler");
+        JBAnnuler.setEnabled(false);
+        JBAnnuler.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBAnnulerActionPerformed(evt);
+            }
+        });
+        jPanel3.add(JBAnnuler);
+
         JBmodifier.setText("Modifier");
         JBmodifier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -181,42 +199,81 @@ public class Interface_db extends javax.swing.JFrame implements WindowListener, 
 
 
     private void JBdernierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBdernierActionPerformed
-            donne.dernier();
-
+        contr.afficherDernier();
     }//GEN-LAST:event_JBdernierActionPerformed
 
     private void JBsuivantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBsuivantActionPerformed
-       donne.suivant();
-
+        contr.afficherSuivant();
     }//GEN-LAST:event_JBsuivantActionPerformed
 
     private void JBprecedentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBprecedentActionPerformed
-        donne.precedent();
-
+        contr.afficherPrecedent();
     }//GEN-LAST:event_JBprecedentActionPerformed
 
     private void JBpremierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBpremierActionPerformed
-            donne.premier();
-
+        contr.afficherPremier();
     }//GEN-LAST:event_JBpremierActionPerformed
 
     private void JBnouveauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBnouveauActionPerformed
-        Nouveau une_fenetre = new Nouveau(donne, this);
-        une_fenetre.setVisible(true);
-        setResizable(true);
-        setLocationRelativeTo(null);
+//        Nouveau une_fenetre = new Nouveau(donne, this);
+//        une_fenetre.setVisible(true);
+//        setResizable(true);
+//        setLocationRelativeTo(null);
+
+        JBAjouter.setEnabled(true);
+        JBAnnuler.setEnabled(true);
+        JBnouveau.setEnabled(false);
+        JBmodifier.setEnabled(false);
+        JBsupprimer.setEnabled(false);
+        JBpremier.setEnabled(false);
+        JBprecedent.setEnabled(false);
+        JBsuivant.setEnabled(false);
+        JBdernier.setEnabled(false);
+        code_t.setText("");
+        designation_t.setText("");
+        code_categorie_t.setText("");
+        prix_t.setText("");
+        contr.saveCurrentRow();
     }//GEN-LAST:event_JBnouveauActionPerformed
 
     private void JBmodifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBmodifierActionPerformed
-          donne.modifier(code_t.getText(),designation_t.getText(),code_categorie_t.getText(),prix_t.getText());
-
+        if (verifyInput()) {
+            contr.modifierCurent(code_t.getText(), designation_t.getText(), code_categorie_t.getText(), prix_t.getText());
+        }
     }//GEN-LAST:event_JBmodifierActionPerformed
 
     private void JBsupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBsupprimerActionPerformed
-            donne.supprimer();
-            donne.precedent();
-
+        contr.supprimerCurent();
     }//GEN-LAST:event_JBsupprimerActionPerformed
+
+    private void JBAjouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAjouterActionPerformed
+        if (verifyInput()) {
+            contr.AjouterRow(code_t.getText(), designation_t.getText(), code_categorie_t.getText(), prix_t.getText());
+            JBAjouter.setEnabled(false);
+            JBAnnuler.setEnabled(false);
+            JBnouveau.setEnabled(true);
+            JBmodifier.setEnabled(true);
+            JBsupprimer.setEnabled(true);
+            JBpremier.setEnabled(true);
+            JBprecedent.setEnabled(true);
+            JBsuivant.setEnabled(true);
+            JBdernier.setEnabled(true);
+        }
+
+    }//GEN-LAST:event_JBAjouterActionPerformed
+
+    private void JBAnnulerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAnnulerActionPerformed
+        JBAjouter.setEnabled(false);
+        JBAnnuler.setEnabled(false);
+        JBnouveau.setEnabled(true);
+        JBmodifier.setEnabled(true);
+        JBsupprimer.setEnabled(true);
+        JBpremier.setEnabled(true);
+        JBprecedent.setEnabled(true);
+        JBsuivant.setEnabled(true);
+        JBdernier.setEnabled(true);
+        contr.annulerAjout();
+    }//GEN-LAST:event_JBAnnulerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -251,12 +308,14 @@ public class Interface_db extends javax.swing.JFrame implements WindowListener, 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Interface_db().setVisible(true);
+                // new Interface_db().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton JBAjouter;
+    private javax.swing.JButton JBAnnuler;
     private javax.swing.JButton JBdernier;
     private javax.swing.JButton JBmodifier;
     private javax.swing.JButton JBnouveau;
@@ -291,7 +350,7 @@ public class Interface_db extends javax.swing.JFrame implements WindowListener, 
 
     @Override
     public void windowIconified(WindowEvent we) {
-         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -306,19 +365,49 @@ public class Interface_db extends javax.swing.JFrame implements WindowListener, 
 
     @Override
     public void windowDeactivated(WindowEvent we) {
-         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void update(Observable o, Object arg) {
-       
-        code_t.setText(donne.getCode());
-        designation_t.setText(donne.getDesignation());
-        code_categorie_t.setText(donne.getCodeCategorie());
-        prix_t.setText(donne.getPrix());
-        
-       
-        if(!donne.getMessage().equals(""))
-        JOptionPane.showMessageDialog(this, donne.getMessage());
+        code_t.setText(contr.getCode());
+        designation_t.setText(contr.getDesignation());
+        code_categorie_t.setText(contr.getCodeCategorie());
+        prix_t.setText(contr.getPrix());
+
+        if (!contr.getMessage().equals("")) {
+            JOptionPane.showMessageDialog(this, contr.getMessage());
+        }
+
+    }
+
+    public boolean verifyInput() {
+        String inputFeedback = "";
+        if (code_t.getText() == null || code_t.getText().isEmpty()) {
+            inputFeedback += "Le champ code doit avoir un valeur\n";
+
+        }
+        if (designation_t.getText() == null || designation_t.getText().isEmpty()) {
+            inputFeedback += "Le champ designation doit avoir un valeur\n";
+
+        }
+        if (code_categorie_t.getText() == null || code_categorie_t.getText().isEmpty()) {
+            inputFeedback += "Le champ code categorie doit avoir un valeur\n";
+
+        }
+        try {
+            Double.parseDouble(prix_t.getText());
+            //JOptionPane.showMessageDialog(this, "Good to go");
+
+        } catch (NumberFormatException ex) {
+            inputFeedback += "Le prix doit etre numeric\n";
+
+        }
+        if (!inputFeedback.equals("")) {
+            JOptionPane.showMessageDialog(this, inputFeedback);
+            return false;
+        } else {
+            return true;
+        }
     }
 }
