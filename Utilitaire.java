@@ -12,24 +12,23 @@ import java.sql.*;
  * @author ddaar
  */
 //cette classe gere la connexion  a la base de donne
-public class utilitaire {
+public class Utilitaire {
 
     Connection connection = null;
-    String data_base_path = "jdbc:derby://localhost:1527/evaluation_finale";
-    String username = "darryl";
-    String password = "dd";
-
+    String data_base_path = null;//"jdbc:derby://localhost:1527/evaluation_finale";
+    String username =  null;//"darryl";
+    String password =  null;//"dd";
     /**
      *
      * @throws SQLException
      */
-    utilitaire(String data_base_path, String username, String password) {
+    Utilitaire(String data_base_path, String username, String password) {
         this.data_base_path = data_base_path;
         this.username = username;
         this.password = password;
     }
 
-    utilitaire() {
+    Utilitaire() {
         this.data_base_path = System.in.toString();
         this.username = System.in.toString();
         this.password = System.in.toString();
