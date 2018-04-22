@@ -6,6 +6,8 @@
 package projet_final;
 
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -14,23 +16,63 @@ import java.sql.SQLException;
 public class Controleur {
 
     private Modele model;
-    private Interface_db inetrfaca_db;
 
-    public Controleur(Modele model, Interface_db inetrfaca_db) {
+    public Controleur(Modele model) {
         this.model = model;
-        this.inetrfaca_db = inetrfaca_db;
-
     }
 
-    void updateView() throws SQLException {
-        //inetrfaca_db.actualiserTextbox(model.getResult().getString("CODE"), model.getResult().getString("DESIGNATION"), model.getResult().getString("CODE_CATEGORIE"), Double.toString(model.getResult().getDouble("PRIX")));
-
+    public void afficherPremier() {
+        model.premier();
     }
 
-    void afficherPremier() throws SQLException {
-        model.select_query();
-        model.getResult().first();
-        //inetrfaca_db.actualiserTextbox(model.getResult().getString("CODE"), model.getResult().getString("DESIGNATION"), model.getResult().getString("CODE_CATEGORIE"), Double.toString(model.getResult().getDouble("PRIX")));
+    public void afficherDernier() {
+        model.dernier();
     }
 
+    public void afficherSuivant() {
+        model.suivant();
+    }
+
+    public void afficherPrecedent() {
+        model.precedent();
+    }
+
+    public void modifierCurent(String a, String b, String c, String d) {
+        model.modifier(a, b, c, d);
+    }
+
+    public void supprimerCurent() {
+        model.supprimer();
+    }
+
+    public void saveCurrentRow() {
+        model.CurrentRow();
+    }
+    public void AjouterRow(String a, String b, String c, String d) {
+        model.ajouter(a, b, c, d);
+    }
+    
+    public String getCode(){
+        return model.getCode();
+    }
+    
+    public String getDesignation(){
+        return model.getDesignation();
+    }
+    
+    public String getCodeCategorie(){
+        return model.getCodeCategorie();
+    }
+    
+    public String getPrix(){
+        return model.getPrix();
+    }
+    
+    public String getMessage(){
+        return model.getMessage();
+    }
+    
+    public void annulerAjout(){
+        model.annulerAjout();
+    }
 }

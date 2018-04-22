@@ -18,12 +18,16 @@ public class Projet_final {
      */
     public static void main(String[] args) throws SQLException {
         // TODO code application logic here
-        Modele mod = new Modele();
-        Interface_db inter = new Interface_db();
+        Modele mod = new Modele(); 
+        Controleur cont = new Controleur(mod);
         
-        Controleur cont = new Controleur(mod, inter);
-        mod.addObserver(inter);
-        cont.updateView();
+         java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+               new Interface_db(cont, mod).setVisible(true);
+            }
+        });
+        
+        //cont.updateView();
     }
     
 }
